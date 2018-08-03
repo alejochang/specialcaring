@@ -10,13 +10,13 @@ themselves so you they can care for their love ones efficiently.
 git clone https://gitlab.com/alejochang/specialcaring.git
 cd specialcaring
 npm install
-npm run start
+npm run serve
 ```
 
 ## Built With
 
-* [graphql-yoga](https://github.com/prismagraphql/graphql-yoga) - GraphQL Server
-* [serverless](https://serverless.com/) - Serverless Framework CLI
+* [Vue CLI 3](https://cli.vuejs.org/) - Tooling for Vue.js Development
+* [Vuetify](https://vuetifyjs.com/) - Material design component framework for Vue
 * [TypeScript](https://www.typescriptlang.org/)
 * [axios](https://github.com/axios/axios/)
-* [mongoose](http://mongoosejs.com/)
+
