@@ -1,48 +1,91 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript" target="_blank">typescript</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest" target="_blank">unit-jest</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch" target="_blank">e2e-nightwatch</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+
+<v-layout row>
+    <v-flex xs12 sm6 offset-sm3>
+      <v-card>
+        <v-toolbar color="teal" dark>
+          <v-toolbar-title>Drug / Supplement List</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+        <v-list>
+          <v-list-group
+            v-for="(drugSupplement, index) in drugSupplements" :key="index"
+            no-action>
+            <v-list-tile slot="activator">
+              <v-list-tile-content>
+                <v-list-tile-title>{{ drugSupplement.name }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ drugSupplement.activeIngredient }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ drugSupplement.concentration }} {{ drugSupplement.unit }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ drugSupplement.quantity }} {{ drugSupplement.presentation }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+        </v-list>
+      </v-card>
+    </v-flex>
+  </v-layout>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script>
+import DrugSupplementService from '@/services/drug-supplement.service';
 
-@Component
-export default class HelloWorld extends Vue {
-  @Prop() private msg!: string;
-}
+export default {
+  name: "HelloWorld",
+  props: {
+    msg: String
+  },
+  data () {
+    return {
+      drugSupplements: []
+    }
+  },
+  mounted () {
+    this.getDrugSupplements();
+  },
+  methods: {
+    async getDrugSupplement () {
+      if (this.drugSupplement === '') {
+        return false
+      }
+      const response = await DrugSupplementService.getDrugSupplement({
+        drugSupplement: this.drugSupplement
+      })
+
+      let responses = response.data.results
+
+      if (responses.length === 0) {
+        this.drugSupplementMeaning = 'Your drugSupplement could not be found and was not added.'
+        this.drugSupplementData = ''
+        return false
+      }
+
+      this.drugSupplementData = responses[0]
+      this.drugSupplementMeaning = responses[0].senses[0].definition
+    },
+    async getDrugSupplements () {
+      const drugs = await DrugSupplementService.getDrugSupplements();
+      console.log(`Drugs: ${JSON.stringify(drugs)}`)
+      this.drugSupplements = drugs;
+    }
+    
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
+<style scoped>
 h3 {
   margin: 40px 0 0;
 }
