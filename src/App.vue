@@ -45,7 +45,7 @@
       </v-btn>
     </v-toolbar>
     <v-content>
-      <HelloWorld/>
+      <DrugSupplementList/>
     </v-content>
     <v-navigation-drawer
       temporary
@@ -70,12 +70,12 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import DrugSupplementList from './components/DrugSupplementList'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    DrugSupplementList
   },
   data () {
     return {

@@ -42,7 +42,7 @@
 import DrugSupplementService from '@/services/drug-supplement.service';
 
 export default {
-  name: "HelloWorld",
+  name: "DrugSupplementList",
   props: {
     msg: String
   },
